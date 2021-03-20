@@ -1,0 +1,87 @@
+<div class="col-md-12">
+    <div class="card" style="width: 14rem">
+        <img id="selected-image{{ label }}" src="{{ url_for('static', filename='images/placeholder-image.png')}}" class="card-img-top" alt="...">
+        <div class="card-body">
+            <input id="image-selector{{ label }}" type="file">
+            <p class="card-text">选择图片请点击👆</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">品种: <span id="species{{ label }}"></span></li>
+            <li class="list-group-item">健康状态: <span id="condition{{ label }}"></span></li>
+            <li class="list-group-item">置信度: <span id="value{{ label }}"></span></li>
+        </ul>
+        <div class="text-center card-body">
+            <div class="btn-group me-2">
+                <button id="predict{{ label }}" type="button" class="btn btn-sm btn-outline-secondary">识别</button>
+                {% if current_user.is_visitor %}
+                    <button type="button" class="btn btn-sm btn-outline-secondary disabled" aria-disabled="true">反馈</button>
+                {% else %}
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.href='{{ url_for('feedback') }}'">反馈</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery.min.js"></script>
+<script>
+    {
+        let base64Image
+        $("#image-selector{{ label }}").change(function() {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let dataURL = reader.result;
+                if(/image/.test($("#image-selector{{ label }}")[0].files[0].type)) {
+                    var typeOfUpload = $("#image-selector{{ label }}")[0].files[0].type
+                    $('#selected-image{{ label }}').attr("src", dataURL);
+                    if (typeOfUpload === "image/jpeg") { // jpg jpeg jfif
+                        base64Image = dataURL.replace("data:image/jpeg;base64,", "");
+                    }else if (typeOfUpload === "image/png"){
+                        base64Image = dataURL.replace("data:image/png;base64,", "");
+                    }else if (typeOfUpload === "image/bmp"){
+                        base64Image = dataURL.replace("data:image/bmp;base64,", "");
+                    }else {
+                        alert("not known")
+                        return
+                    }
+                }else{
+                    var noimage = new bootstrap.Modal(document.getElementById('noimage'), {})
+                    noimage.show()
+                    return
+                }
+
+                console.log($("#image-selector{{ label }}")[0].files[0].name);
+            }
+            reader.readAsDataURL($("#image-selector{{ label }}")[0].files[0]);
+            $("#species").text("");
+            $("#condition").text("");
+            $("#value").text("");
+        });
+        $("#predict{{ label }}").click(function(){
+            let message = {
+                value: "{{label}}",
+                image: base64Image
+            };
+            if(typeof(message['image']) != "undefined") {
+                if("{{current_user.is_visitor}}"==="True"){
+                    $.post("{{ url_for('predict_for_visitor') }}", JSON.stringify(message), function(response){
+                        $("#species{{ label }}").text(response.prediction.species);
+                        $("#condition{{ label }}").text(response.prediction.condition);
+                        $("#value{{ label }}").text(response.prediction.value);
+                        {#console.log(response);#}
+                    });
+                }else{
+                    $.post("{{ url_for('predictbykind') }}", JSON.stringify(message), function(response){
+                        $("#species{{ label }}").text(response.prediction.species);
+                        $("#condition{{ label }}").text(response.prediction.condition);
+                        $("#value{{ label }}").text(response.prediction.value);
+                        {#console.log(response);#}
+                    });
+                }
+            }else{
+                var noimage = new bootstrap.Modal(document.getElementById('noimage'), {})
+                noimage.show()
+                return
+            }
+        });
+    }
+</script>

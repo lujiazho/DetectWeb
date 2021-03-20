@@ -1,0 +1,104 @@
+ <!-- Bootstrap core CSS -->
+<link href="/static/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+<!-- Custom styles for this template -->
+<link href="/static/docs/5.0/examples/dashboard/dashboard.css" rel="stylesheet">
+
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                {% if current_user.is_visitor %}
+                    <a class="nav-link disabled" aria-current="page" aria-disabled="true">
+                        <span data-feather="home"></span>
+                        个人主页
+                    </a>
+                {% else %}
+                    <a class="nav-link" aria-current="page" href="{{ url_for('index') }}">
+                        <span data-feather="home"></span>
+                        个人主页
+                    </a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                {% if current_user.is_visitor %}
+                    <a class="nav-link" href="{{ url_for('predict_for_visitor', username=current_user.username) }}">
+                        <span data-feather="zoom-in"></span>
+                        病害识别
+                    </a>
+                {% else %}
+                    <a class="nav-link" href="{{ url_for('predict') }}">
+                        <span data-feather="zoom-in"></span>
+                        病害识别
+                    </a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                {% if current_user.is_visitor %}
+                    <a class="nav-link disabled" aria-disabled="true">
+                        <span data-feather="bar-chart-2"></span>
+                        同城趋势
+                    </a>
+                {% else %}
+                    <a class="nav-link" href="{{ url_for('dashboard') }}">
+                        <span data-feather="bar-chart-2"></span>
+                        同城趋势
+                    </a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="users"></span>
+                    尽请期待
+                </a>
+            </li>
+        </ul>
+
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>历史记录</span>
+            <a class="link-secondary" href="#" aria-label="Add a new report">
+                <span data-feather="plus-circle"></span>
+            </a>
+        </h6>
+        <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+                {% if current_user.is_visitor %}
+                    <a class="nav-link disabled" aria-disabled="true">
+                        <span data-feather="file-text"></span>
+                        识别记录
+                    </a>
+                {% else %}
+                    <a class="nav-link" href="{{ url_for('predict_history') }}">
+                        <span data-feather="file-text"></span>
+                        识别记录
+                    </a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                {% if current_user.is_visitor %}
+                    <a class="nav-link disabled" aria-disabled="true">
+                        <span data-feather="file-text"></span>
+                        反馈记录
+                    </a>
+                {% else %}
+                    <a class="nav-link" href="{{ url_for('feedback_history') }}">
+                        <span data-feather="file-text"></span>
+                        反馈记录
+                    </a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <span data-feather="file-text"></span>
+                    尽请期待
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<script src="/static/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
+<script src="/static/docs/5.0/js/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script><script src="/static/docs/5.0/js/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+<script src="/static/docs/5.0/examples/dashboard/dashboard.js"></script>

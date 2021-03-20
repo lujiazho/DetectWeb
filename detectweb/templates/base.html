@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+{#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">#}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    {% if title %}
+        <title>{{ title }}</title>
+    {% else %}
+        <title>欢迎来到DetectWeb</title>
+    {% endif %}
+
+</head>
+<body style="background-color:#f3f8ff;">
+
+    <div class="sticky-top d-flex flex-column flex-md-row align-items-center p-2 px-md-4 mb-3 bg-body border-bottom shadow-sm">
+        {% if current_user.is_visitor %}
+            <a class="h5 my-0 me-md-auto text-dark fw-bold" style="text-decoration:none" data-bs-toggle="popover" data-bs-trigger="hover focus" role="button" title="访问受限" data-bs-content="注册登录开启更多功能">DetectWeb</a>
+        {% else %}
+            <a class="h5 my-0 me-md-auto text-dark fw-bold" style="text-decoration:none" href="{{ url_for('index') }}">DetectWeb</a>
+        {% endif %}
+        <nav class="my-2 my-md-0 me-md-3">
+            {% if current_user.is_visitor %}
+                <a class="p-2 text-dark" data-bs-toggle="popover" data-bs-trigger="hover focus" role="button" title="访问受限" data-bs-content="注册登录开启更多功能">发现</a>
+            {% else %}
+                <a class="p-2 text-dark" href="{{ url_for('explore') }}">发现</a>
+            {% endif %}
+        </nav>
+        <!-- is_anonymous表示没有登陆 -->
+        {% if current_user.is_anonymous %}
+            <a class="btn btn-outline-primary" href="{{ url_for('login') }}">登录</a>
+        {% else %}
+            <a class="btn btn-outline-primary" href="{{ url_for('logout') }}">登出</a>
+        {% endif %}
+    </div>
+    <script>
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+          return new bootstrap.Popover(popoverTriggerEl)
+        })
+    </script>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for message in messages %}
+                {% if message[0] == "message" %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ message[1] }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% else %}
+                    <div class="alert alert-{{ message[0] }} alert-dismissible fade show" role="alert">
+                        {{ message[1] }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="container-fluid">
+        {% block content %} {% endblock %}
+    </div>
+</body>

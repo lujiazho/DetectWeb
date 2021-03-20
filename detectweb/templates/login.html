@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link href="/static/css/signin.css" rel="stylesheet">
+<div class='row'>
+    <div class="text-center col-lg-4"></div>
+    <div class="text-center col-lg-4">
+        <img class="rounded mx-auto d-block" src="/static/images/logo.JPG" alt="" width="128" height="128">
+        <h1 class="h3 mb-3 font-weight-normal">通宵达旦病虫害检测</h1>
+        <form action="" method="post" class="form-signin">
+            <p>
+                {{ form.username(type="username", id="inputUsername", class="form-control", placeholder="用户名") }}
+            </p>
+            <p>
+                {{ form.password(type="password", id="inputPassword", class="form-control", placeholder="密码") }}
+            </p>
+            <p>
+                <div class="checkbox mb-3">
+                    {{ form.remember_me(type="checkbox", value="remember-me") }}
+                    {{ form.remember_me.label }}
+                </div>
+            </p>
+            <button class="w-100 btn btn-lg btn-primary" type="submit">登录</button>
+            <p>
+                <a href="{{ url_for('register') }}">新用户?</a>或
+                <a href="{{ url_for('reset_password_request') }}">忘记密码?</a>或
+                <a href="{{ url_for('visitor') }}">访客登录</a>
+            </p>
+            <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
+        </form>
+    </div>
+</div>
+{% endblock %}

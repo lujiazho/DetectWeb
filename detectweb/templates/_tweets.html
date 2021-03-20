@@ -1,0 +1,18 @@
+<table class="table table-hover">
+
+</table>
+<div class="my-3 p-3 bg-body rounded shadow-sm">
+    <h6 class="border-bottom pb-2 mb-0">最近</h6>
+    {% for tweet in tweets %}
+        <div class="d-flex text-muted pt-3">
+            <img src="{{ tweet.author.avatar(48) }}" class="rounded-circle" alt="">
+            <p class="pb-3 mb-0 small lh-sm border-bottom">
+                <a href="{{ url_for('profile', username=tweet.author.username) }}">
+                    <strong class="fw-bold text-dark">{{ tweet.author.username }}</strong>
+                </a>
+                {{ tweet.create_time }}<br>
+                {{ tweet.body }}
+            </p>
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <script src="/static/docs/5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var Server = {
+            seven_days: {{ assign_timeline["week"] }},
+            thirty_days: {{ assign_timeline["month"] }},
+            whole_year: {{ assign_timeline["year"] }},
+            ten_year: {{ assign_timeline["tenyear"] }}
+  	    };
+	</script>
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'sidenav.html' %}
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">病害检测趋势</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            {#                    <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>#}
+                            <button type="button" id="save" class="btn btn-sm btn-outline-secondary">导出</button>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span data-feather="calendar"></span>
+                                {% if assign_timeline["week"] != -1 %}
+                                    本周
+                                {% elif assign_timeline["month"] != -1 %}
+                                    本月
+                                {% elif assign_timeline["year"] != -1 %}
+                                    本年
+                                {% elif assign_timeline["tenyear"] != -1 %}
+                                    近十年
+                                {% endif %}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                {% if assign_timeline["week"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline="week", type=type_)}}">本周</a></li>
+                                {% endif %}
+                                {% if assign_timeline["month"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline="month", type=type_)}}">本月</a></li>
+                                {% endif %}
+                                {% if assign_timeline["year"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline="year", type=type_)}}">本年</a></li>
+                                {% endif %}
+                                {% if assign_timeline["tenyear"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline="tenyear", type=type_)}}">近十年</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <!-- 品种 -->
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span data-feather="calendar"></span>
+                                {% if assign_type["allkinds"] != -1 %}
+                                    全品种
+                                {% elif assign_type["apple"] != -1 %}
+                                    苹果
+                                {% elif assign_type["cherry"] != -1 %}
+                                    樱桃
+                                {% elif assign_type["corn"] != -1 %}
+                                    玉米
+                                {% elif assign_type["grape"] != -1 %}
+                                    葡萄
+                                {% elif assign_type["peach"] != -1 %}
+                                    桃子
+                                {% elif assign_type["pepper"] != -1 %}
+                                    胡椒
+                                {% elif assign_type["potato"] != -1 %}
+                                    土豆
+                                {% elif assign_type["tomato"] != -1 %}
+                                    西红柿
+                                {% endif %}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                {% if assign_type["allkinds"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline=timeline, type="allkinds")}}">全品种</a></li>
+                                {% endif %}
+                                {% if assign_type["apple"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline=timeline, type="apple")}}">苹果</a></li>
+                                {% endif %}
+                                {% if assign_type["cherry"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline=timeline, type="cherry")}}">樱桃</a></li>
+                                {% endif %}
+                                {% if assign_type["corn"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline=timeline, type="corn")}}">玉米</a></li>
+                                {% endif %}
+                                {% if assign_type["grape"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline=timeline, type="grape")}}">葡萄</a></li>
+                                {% endif %}
+                                {% if assign_type["peach"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline=timeline, type="peach")}}">桃子</a></li>
+                                {% endif %}
+                                {% if assign_type["pepper"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline=timeline, type="pepper")}}">胡椒</a></li>
+                                {% endif %}
+                                {% if assign_type["potato"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline=timeline, type="potato")}}">土豆</a></li>
+                                {% endif %}
+                                {% if assign_type["tomato"] == -1 %}
+                                    <li><a class="dropdown-item" href="{{url_for('dashboard', timeline=timeline, type="tomato")}}">西红柿</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                您所在城市为 {{ user.city }}
+                <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
+
+                <h2>
+                    {% if assign_timeline["week"] != -1 %}
+                        每日新增
+                    {% elif assign_timeline["month"] != -1 %}
+                        每日新增
+                    {% elif assign_timeline["year"] != -1 %}
+                        每月新增
+                    {% elif assign_timeline["tenyear"] != -1 %}
+                        每年新增
+                    {% endif %}
+
+                </h2>
+                <canvas class="my-4 w-100" id="myChart_increase" width="900" height="380"></canvas>
+            </main>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var Canvas = document.getElementById("myChart");
+        var Canvas_increase = document.getElementById("myChart_increase");
+        document.getElementById("save").onclick = function (){
+            downLoad(saveAsPNG(Canvas), "趋势图");
+            downLoad(saveAsPNG(Canvas_increase), "新增图");
+        }
+        // 保存成jpg格式的图片
+        function saveAsPNG(canvas) {
+            return canvas.toDataURL("image/png");
+        }
+        function downLoad(url, filename){
+            var oA = document.createElement("a");
+            oA.download = filename;// 设置下载的文件名，默认是'下载'
+            oA.href = url;
+            document.body.appendChild(oA);
+            oA.click();
+            oA.remove(); // 下载之后把创建的元素删除
+        }
+    </script>
+    <script src="/static/docs/5.0/js/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+    <script src="/static/docs/5.0/js/Chart.min.js" integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha" crossorigin="anonymous"></script>
+    <script src="/static/docs/5.0/examples/dashboard/dashboard.js"></script>
+{% endblock %}

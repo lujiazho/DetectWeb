@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if current_user.is_visitor %}
+        {% include 'limits.html' %}
+    {% endif %}
+    <link href="/static/docs/5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <div class="container-fluid">
+      <div class="row">
+        {% include 'sidenav.html' %}
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">个人中心</h1>
+                <h5 class="col-4 d-flex justify-content-end align-items-center">
+                    欢迎，
+                    {% if current_user.is_visitor %}
+                        <a data-bs-toggle="popover" data-bs-trigger="hover focus" role="button" title="访问受限" data-bs-content="注册登录开启更多功能">
+                            <b class="fw-bold text-dark">{{ current_user.username }}</b>
+                        </a>
+                    {% else %}
+                        <a href="/{{ current_user.username }}">
+                            <b class="fw-bold text-dark">{{ current_user.username }}</b>
+                        </a>
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="nav-scroller py-1 mb-2">
+                <nav class="nav d-flex justify-content-between">
+                    <a class="p-2 link-secondary" href="{{ url_for("intro", value="cherry") }}">樱桃篇</a>
+                    <a class="p-2 link-secondary" href="{{ url_for("intro", value="tomato") }}">番茄篇</a>
+                    <a class="p-2 link-secondary" href="{{ url_for("intro", value="pepper") }}">胡椒篇</a>
+                    <a class="p-2 link-secondary" href="{{ url_for("intro", value="potato") }}">土豆篇</a>
+                    <a class="p-2 link-secondary" href="{{ url_for("intro", value="peach") }}">桃子篇</a>
+                    <a class="p-2 link-secondary" href="{{ url_for("intro", value="corn") }}">玉米篇</a>
+                    <a class="p-2 link-secondary" href="{{ url_for("intro", value="grape") }}">葡萄篇</a>
+                    <a class="p-2 link-secondary" href="{{ url_for("intro", value="apple") }}">苹果篇</a>
+                    <a class="p-2 link-secondary" href="https://baijiahao.baidu.com/s?id=1662865033792131981&wfr=spider&for=pc" target="_blank">防治条例</a>
+                </nav>
+            </div>
+            <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark" style="background: url('/static/images/fengshou.jfif') no-repeat center;background-size: cover">
+                <div class="col-md-6 px-0">
+                    <h1 class="display-4 fst-italic">远离病虫害<br>水稻大丰收</h1>
+                    <p class="lead my-3">2020年全国粮食生产再获丰收，总产量为13390亿斤，从病虫害防治角度，农民2021年需要注意哪些？
+                    连日来，我国坚持“预防为主、防治结合、综合防治”的水稻田管原则，广泛宣传，科学指导，多措并举，扎实开展水稻病虫害综合防治</p>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <strong class="d-inline-block mb-2 text-primary">世界</strong>
+                            <h3 class="mb-0">农业产业绿色振兴</h3>
+                            <div class="mb-1 text-muted">08/01</div>
+                            <p class="card-text mb-auto">如何充分发挥科技兴农作用、怎样有效促进产业绿色振兴，无疑是新时代赋予农业科研院所与科技人员的...</p>
+                            <a href="{{ url_for("article", value="1") }}" class="stretched-link">继续阅读</a>
+                        </div>
+                        <div class="col-md-4" style="background: url('/static/images/articles/绿色产业.jpg') no-repeat center;background-size: cover">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <strong class="d-inline-block mb-2 text-success">科学</strong>
+                            <h3 class="mb-0">如何进行科学施肥</h3>
+                            <div class="mb-1 text-muted">01/14</div>
+                            <p class="mb-auto">对农作物施肥一直是农业生产中重要的环节，其好坏决定着农作物的生长情况，那究竟该如何进行科学的施肥呢？下面就...</p>
+                            <a href="{{ url_for("article", value="2") }}" class="stretched-link">继续阅读</a>
+                        </div>
+                        <div class="col-md-4" style="background: url('/static/images/articles/科学施肥.jpg') no-repeat center;background-size: cover">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+      </div>
+    </div>
+{% endblock %}

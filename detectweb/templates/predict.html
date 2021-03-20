@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="modal fade" id="noimage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">提示</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    请选择图片！
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-danger" data-bs-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if current_user.is_visitor %}
+        {% include 'limits.html' %}
+    {% endif %}
+    <div class="container-fluid">
+      <div class="row">
+            {% include 'sidenav.html' %}
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">病害识别</h1>
+                </div>
+
+                <div class="container container-table">
+                    <div class="row vertical-center-row">
+                        <div class="d-flex align-items-start">
+                            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                {% if current_user.is_visitor %}
+                                    <button class="nav-link active" id="v-pills-all-tab" data-bs-toggle="pill" data-bs-target="#v-pills-all" type="button" role="tab" aria-controls="v-pills-all" aria-selected="false">专类识别</button>
+                                {% else %}
+                                    <button class="nav-link active" id="v-pills-all-tab" data-bs-toggle="pill" data-bs-target="#v-pills-all" type="button" role="tab" aria-controls="v-pills-all" aria-selected="true">泛类识别</button>
+                                {% endif %}
+
+                                <hr>
+                                <button class="nav-link" id="v-pills-Apple-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Apple" type="button" role="tab" aria-controls="v-pills-Apple" aria-selected="false">苹果</button>
+                                <button class="nav-link" id="v-pills-Cherry-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Cherry" type="button" role="tab" aria-controls="v-pills-Cherry" aria-selected="false">樱桃</button>
+                                <button class="nav-link" id="v-pills-Corn-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Corn" type="button" role="tab" aria-controls="v-pills-Corn" aria-selected="false">玉米</button>
+                                <button class="nav-link" id="v-pills-Grape-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Grape" type="button" role="tab" aria-controls="v-pills-Grape" aria-selected="false">葡萄</button>
+                                <button class="nav-link" id="v-pills-Peach-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Peach" type="button" role="tab" aria-controls="v-pills-Peach" aria-selected="false">桃子</button>
+                                <button class="nav-link" id="v-pills-Pepper-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Pepper" type="button" role="tab" aria-controls="v-pills-Pepper" aria-selected="false">胡椒</button>
+                                <button class="nav-link" id="v-pills-Potato-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Potato" type="button" role="tab" aria-controls="v-pills-Potato" aria-selected="false">土豆</button>
+                                <button class="nav-link" id="v-pills-Tomato-tab" data-bs-toggle="pill" data-bs-target="#v-pills-Tomato" type="button" role="tab" aria-controls="v-pills-Tomato" aria-selected="false">西红柿</button>
+                            </div>
+                            <div class="tab-content" id="v-pills-tabContent" style="margin: 0 auto;">
+                                <div class="tab-pane fade show active" id="v-pills-all" role="tabpanel" aria-labelledby="v-pills-all-tab">
+                                    {% if current_user.is_visitor %}
+                                        <div class="text-center">
+                                            须知<br>
+                                            访问者无法使用泛类识别功能<br>
+                                            且识别结果和历史将无法保存<br>
+                                            使用本产品默认接受以上规定<br>
+                                            任何后果及损失概不负责！！
+                                        </div>
+                                    {% else %}
+                                        <div class="col-md-12">
+                                            <div class="card" style="width: 14rem">
+                                                <img id="selected-image" src="{{ url_for('static', filename='images/placeholder-image.png')}}" class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <input id="image-selector" type="file">
+                                                    <p class="card-text">选择图片请点击👆</p>
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item">品种: <span id="species"></span></li>
+                                                    <li class="list-group-item">健康状态: <span id="condition"></span></li>
+                                                    <li class="list-group-item">置信度: <span id="value"></span></li>
+                                                </ul>
+                                                <div class="text-center card-body">
+                                                    <div class="btn-group me-2">
+                                                        <button id="predict-button" type="button" class="btn btn-sm btn-outline-secondary">识别</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.href='{{ url_for('feedback') }}'">反馈</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                {% with label="Apple" %}
+                                    <div class="tab-pane fade" id="v-pills-Apple" role="tabpanel" aria-labelledby="v-pills-Apple-tab">{% include 'predict_card.html' %}</div>
+                                {% endwith %}
+                                {% with label="Cherry" %}
+                                    <div class="tab-pane fade" id="v-pills-Cherry" role="tabpanel" aria-labelledby="v-pills-Cherry-tab">{% include 'predict_card.html' %}</div>
+                                {% endwith %}
+                                {% with label="Corn" %}
+                                    <div class="tab-pane fade" id="v-pills-Corn" role="tabpanel" aria-labelledby="v-pills-Corn-tab">{% include 'predict_card.html' %}</div>
+                                {% endwith %}
+                                {% with label="Grape" %}
+                                    <div class="tab-pane fade" id="v-pills-Grape" role="tabpanel" aria-labelledby="v-pills-Grape-tab">{% include 'predict_card.html' %}</div>
+                                {% endwith %}
+                                {% with label="Peach" %}
+                                    <div class="tab-pane fade" id="v-pills-Peach" role="tabpanel" aria-labelledby="v-pills-Peach-tab">{% include 'predict_card.html' %}</div>
+                                {% endwith %}
+                                {% with label="Pepper" %}
+                                    <div class="tab-pane fade" id="v-pills-Pepper" role="tabpanel" aria-labelledby="v-pills-Pepper-tab">{% include 'predict_card.html' %}</div>
+                                {% endwith %}
+                                {% with label="Potato" %}
+                                    <div class="tab-pane fade" id="v-pills-Potato" role="tabpanel" aria-labelledby="v-pills-Potato-tab">{% include 'predict_card.html' %}</div>
+                                {% endwith %}
+                                {% with label="Tomato" %}
+                                    <div class="tab-pane fade" id="v-pills-Tomato" role="tabpanel" aria-labelledby="v-pills-Tomato-tab">{% include 'predict_card.html' %}</div>
+                                {% endwith %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+{#    <!-- Latest compiled and minified CSS -->#}
+{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
+
+    <!-- jQuery library -->
+    <script src="/static/js/jquery.min.js"></script>
+
+{#    <!-- Latest compiled JavaScript -->#}
+{#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+
+    <script>
+        let base64Image;
+        $("#image-selector").change(function() {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let dataURL = reader.result;
+                if(/image/.test($("#image-selector")[0].files[0].type)) {
+                    var typeOfUpload = $("#image-selector")[0].files[0].type
+
+                    $('#selected-image').attr("src", dataURL);
+                    if (typeOfUpload === "image/jpeg") { // jpg jpeg jfif
+                        base64Image = dataURL.replace("data:image/jpeg;base64,", "");
+                    }else if (typeOfUpload === "image/png"){
+                        base64Image = dataURL.replace("data:image/png;base64,", "");
+                    }else if (typeOfUpload === "image/bmp"){
+                        base64Image = dataURL.replace("data:image/bmp;base64,", "");
+                    }else {
+                        alert("not known")
+                        return
+                    }
+                }else{
+                    var noimage = new bootstrap.Modal(document.getElementById('noimage'), {})
+                    noimage.show()
+                    return
+                }
+
+                {#console.log($("#image-selector")[0].files[0].name);#}
+            }
+            reader.readAsDataURL($("#image-selector")[0].files[0]);
+            $("#species").text("");
+            $("#condition").text("");
+            $("#value").text("");
+        });
+
+        $("#predict-button").click(function(){
+            let message = {
+                image: base64Image
+            }
+            if(typeof(message['image']) != "undefined") {
+                $.post("{{ url_for('predict') }}", JSON.stringify(message), function(response){
+                    $("#species").text(response.prediction.species);
+                    $("#condition").text(response.prediction.condition);
+                    $("#value").text(response.prediction.value);
+                    console.log(response);
+                });
+            }else{
+                var noimage = new bootstrap.Modal(document.getElementById('noimage'), {})
+                noimage.show()
+                return
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,5 @@
+亲爱的 {{ username }},
+
+要确认您的电子邮件地址并完成您的DetectWeb帐户的设置，请单击下面的链接。
+
+{{ url_user_activate }}

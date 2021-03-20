@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container container-table">
+        <div class="row vertical-center-row">
+            <div class="text-center col-md-12">
+                <img id="most-recent-image" height="350" width="350" src="{{ url_for('static', filename=predict_img.img_path[7:])}}"/>
+                <br>{% if designated %}指定预测：{% else %}最新预测：{% endif %}{{ predict_img.img_path[-32:-4] }}
+                <br>预测结果：{{ en2ch[predict_img.predict_result] }}
+                <br>置信度：{{ predict_img.predict_value }}
+                {% if feedbacked %}
+                    <p class="text-success">上次反馈: 【{{ find_.body }}】</p>
+                {% endif %}
+            </div>
+            <div class="text-center col-md-12">
+                <form class="col-lg-6" action="" method="post" style="margin: 0 auto;">
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.tweet(cols=50, rows=4) }}<br>
+                        {% for error in form.tweet.errors %}
+                            <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                    <input type="hidden" name="imgname" value="{{ predict_img.img_path[-32:-4] }}">
+                    {% if feedbacked %}
+                        <button class="btn btn-info disabled" id="feedback-button" type="submit" aria-disabled="true">已反馈</button>
+                    {% else %}
+                        <button class="btn btn-info" id="feedback-button" type="submit">反馈</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+
+{#    <!-- Latest compiled and minified CSS -->#}
+{#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">#}
+{##}
+    <!-- jQuery library -->
+    <script src="/static/js/ajax/jquery.min.js"></script>
+
+{#    <!-- Latest compiled JavaScript -->#}
+{#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+
+    <script>
+        $("#feedback-button").click(function(){
+            let message = {
+                image: base64Image
+            }
+            console.log(message);
+            $.post("{{ url_for('feedback') }}", JSON.stringify(message), function(response){
+                $("#prediction").text(response.prediction.prediction);
+                $("#value").text(response.prediction.value);
+                console.log(response);
+            });
+        });
+    </script>
+{% endblock %}

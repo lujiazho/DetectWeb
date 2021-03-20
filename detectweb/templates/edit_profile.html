@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='row'>
+    <div class="text-center col-lg-4"></div>
+    <div class="text-center col-lg-4">
+        <h1>Edit Profile</h1>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.about_me.label }}<br>
+                {{ form.about_me(cols=50, rows=4) }}<br>
+                {% for error in form.about_me.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <button class="btn btn-info" type="submit">Save</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

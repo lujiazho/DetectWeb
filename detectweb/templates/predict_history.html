@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <link rel="stylesheet" href="/static/css/viewer.css">
+    <script src="/static/js/viewer.js"></script>
+    <script type="text/javascript">
+        var x = {{ totol_num }}
+	</script>
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'sidenav.html' %}
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">识别记录</h1>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-dark table-hover" style="text-align: center;vertical-align: middle;">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>图片缩略</th>
+                                <th>图片详情</th>
+                                <th>图片尺寸</th>
+                                <th>识别结果</th>
+                                <th>置信度</th>
+                                <th>图片操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for per in allpredicts %}
+                                <tr>
+                                    <td><script>document.write(x);x -= 1</script></td>
+                                    <td><img id="{{ per.img_name }}" src="{{ per.img_path }}" width="120" height="120"></td>
+                                    <td>{{ per.img_name }}</td>
+                                    <td>{{ per.size }}</td>
+                                    <td>{{ en2ch[per.predict_result] }}</td>
+                                    <td>{{ per.predict_value }}</td>
+                                    <td>
+                                        <a href="#" class="text-white" onclick="showImg('{{ per.img_name }}')">查看大图</a>
+                                        <a href="{{ url_for('feedback', value=per.img_name) }}" class="text-white">反馈图片</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-between mb-1">
+                                {% if prev_url %}
+                                    <a href="{{ prev_url }}" class="btn btn-outline-primary btn-sm">上一页</a>
+                                {% else %}
+                                    <a href="#" class="btn btn-outline-primary btn-sm disabled" aria-disabled="true">上一页</a>
+                                {% endif %}
+                                {% if next_url %}
+                                    <a href="{{ next_url }}" class="btn btn-outline-primary btn-sm">下一页</a>
+                                {% else %}
+                                    <a href="#" class="btn btn-outline-primary btn-sm disabled" aria-disabled="true">下一页</a>
+                                {% endif %}
+                            </div>
+                        </tbody>
+                    </table>
+                </div>
+
+            </main>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function showImg(id){
+            var image = new Viewer(document.getElementById(id),{
+                url: 'data-original'
+            });
+            document.getElementById(id).click();
+        }
+    </script>
+
+{% endblock %}
