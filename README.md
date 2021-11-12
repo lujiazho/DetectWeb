@@ -14,3 +14,16 @@ Potato = ['[Early_blight]', '[Late_blight]', '[healthy]']
 Tomato = ['[Target_Spot]', '[YellowLeaf_Curl_Virus]', '[Bacterial_spot]', '[Early_blight]', '[healthy]', '[Late_blight]', '[Leaf_Mold]', '[Septoria_leaf_spot]', '[Spider_mites]']
 ```
 We train a general model for all types of fruit, which means this model can be used to examine all 8 fruit and corresponding conditions. 8 specialized models for a single fruit are also trained for better recognition accuracy.
+
+## Software Environment
+Project Framework：Flask + Bootstrap
+Development Environment：Pycharm
+Database：MySql
+ORM library: SQLAlchemy
+
+## Requirements
+```
+$ git clone https://github.com/lujiazho/DetectWeb.git
+$ cd DetectWeb
+$ pip install -r requirements.txt
+```
