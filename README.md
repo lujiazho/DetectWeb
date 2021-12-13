@@ -13,7 +13,9 @@ Pepper = ['[Bacterial_spot]', '[healthy]']
 Potato = ['[Early_blight]', '[Late_blight]', '[healthy]']
 Tomato = ['[Target_Spot]', '[YellowLeaf_Curl_Virus]', '[Bacterial_spot]', '[Early_blight]', '[healthy]', '[Late_blight]', '[Leaf_Mold]', '[Septoria_leaf_spot]', '[Spider_mites]']
 ```
+
 We train a general model for all types of fruit, which means this model can be used to examine all 8 fruit and corresponding conditions. 8 specialized models for a single fruit are also trained for better recognition accuracy.
+<img src="demonstration/kinds.png" width="60%">
 
 ## Software Environment
 Project Framework：Flask + Bootstrap
@@ -27,3 +29,9 @@ $ git clone https://github.com/lujiazho/DetectWeb.git
 $ cd DetectWeb
 $ pip install -r requirements.txt
 ```
+
+## Demonstration
+|Interface Ⅰ|Appearance|Interface Ⅱ|Appearance
+|---|---|---|---
+|<p align="center">Detection</p>|<img src="demonstration/detection.png" width="100%">|<p align="center">Main Interface</p>|<img src="demonstration/main.png" width="100%" alt="" align=center />
+|<p align="center">Record</p>|<img src="demonstration/record.png" width="100%">|<p align="center">Trend</p>|<img src="demonstration/trend.png" width="100%" alt="" align=center />
