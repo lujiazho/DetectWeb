@@ -19,8 +19,11 @@ We train a general model for all types of fruit, which means this model can be u
 
 ## Software Environment
 Project Framework：Flask + Bootstrap
+
 Development Environment：Pycharm
+
 Database：MySql
+
 ORM library: SQLAlchemy
 
 ## Requirements
